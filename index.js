@@ -7,6 +7,6 @@ app.get('/healthz', (req,res) => {
 })
 
 const PORT = 5001;
-app.listen(PORT, () => console.log('Server listening on ${PORT}'))
+app.listen(PORT, () => console.log(`Server listening on PORT: ${PORT}`))
 
 module.exports = app;
