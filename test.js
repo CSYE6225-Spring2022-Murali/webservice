@@ -10,7 +10,7 @@ describe('GET /healthz', () => {
         request(app)
         .get('/healthz')
         .end( (err,res) => {
-            assert.equal('200', res.statusCode);
+            assert.equal('201', res.statusCode);
             done();
         });
     });
