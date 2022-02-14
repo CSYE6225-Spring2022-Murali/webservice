@@ -12,6 +12,7 @@ Prerequisites:
 ------------------
 Steps to Build the Application:
 1. run "npm i" or "npm install" -- to install dependencies
-2. run "npm run dev" -- to start the server on dev environment
-3. run "npm test" -- to run mocha test cases
+2. run "npm i sequelize mysql2 email-validator password-validator" -- to install additional packages
+3. run "npm run dev" -- to start the server on dev environment
+4. run "npm test" -- to run mocha test cases
 ------------------ 
