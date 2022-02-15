@@ -1,5 +1,6 @@
 const db = require("../models");
 const User = db.users;
+const bcrypt = require('bcrypt');
 
 
 //Validators
@@ -25,11 +26,13 @@ passValidator
 
 //Adding User to app
 const addUser = async (req, res) => {
+
+//   const hashPassword = bcrypt.hash(req.body.password, 10);
   let info = {
     username: req.body.username,
     lastName: req.body.lastName,
     firstName: req.body.firstName,
-    password: req.body.password,
+    password: req.body.password
   };
 
   if (
