@@ -1,7 +1,6 @@
 const db = require("../models");
 const User = db.users;
-const bcrypt = require('bcrypt');
-
+const bcrypt = require("bcrypt");
 
 //Validators
 const emailValidator = require("email-validator");
@@ -23,23 +22,25 @@ passValidator
   .not()
   .spaces();
 
-
 //Adding User to app
 const addUser = async (req, res) => {
+  // generate salt to hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-//   const hashPassword = bcrypt.hash(req.body.password, 10);
   let info = {
     username: req.body.username,
     lastName: req.body.lastName,
     firstName: req.body.firstName,
-    password: req.body.password
+    password: hashPassword,
   };
 
   if (
     !emailValidator.validate(`${req.body.username}`) ||
     !passValidator.validate(`${req.body.password}`) ||
-    !req.body.firstName || 
-    !req.body.lastName) {
+    !req.body.firstName ||
+    !req.body.lastName
+  ) {
     res.status(400).send();
   } else {
     const findUser = await User.findOne({
@@ -69,22 +70,27 @@ const userInfo = async (req, res) => {
     var decoded = new Buffer(encoded, "base64").toString();
     var username = decoded.split(":")[0];
     var password = decoded.split(":")[1];
+
     // check if the passed username and password match with the values in our database.\
 
     const findUser = await User.findOne({
-      where: { username: username, password: password },
+      where: { username: username },
     });
     if (findUser !== null) {
-      let plainUser = {
-        id: findUser.id,
-        username: findUser.username,
-        firstName: findUser.firstName,
-        lastName: findUser.lastName,
-        account_created: findUser.account_created,
-        account_updated: findUser.account_updated,
-      };
+      if (await bcrypt.compare(password, findUser.password)) {
+        let plainUser = {
+          id: findUser.id,
+          username: findUser.username,
+          firstName: findUser.firstName,
+          lastName: findUser.lastName,
+          account_created: findUser.account_created,
+          account_updated: findUser.account_updated,
+        };
 
-      res.status(200).send(JSON.stringify(plainUser));
+        res.status(200).send(JSON.stringify(plainUser));
+      } else {
+        res.status(400).send();
+      }
     } else {
       res.status(400).send();
     }
@@ -111,14 +117,14 @@ const updateUser = async (req, res) => {
       if (!req.body.firstName || !req.body.lastName || !req.body.password) {
         res.status(400).send();
       } else {
-        if(passValidator.validate(`${req.body.password}`)){  
-        findUser.update({
-          firstName: `${req.body.firstName}`,
-          lastName: `${req.body.lastName}`,
-          password: `${req.body.password}`
-        });
-        }else{
-            res.status(400).send();
+        if (passValidator.validate(`${req.body.password}`)) {
+          findUser.update({
+            firstName: `${req.body.firstName}`,
+            lastName: `${req.body.lastName}`,
+            password: `${req.body.password}`,
+          });
+        } else {
+          res.status(400).send();
         }
         res.status(200).send();
       }
