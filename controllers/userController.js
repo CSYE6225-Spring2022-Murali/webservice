@@ -49,7 +49,7 @@ const addUser = async (req, res) => {
     if (findUser === null) {
       const user = await User.create(info);
       res
-        .status(200)
+        .status(201)
         .send()
         .then(() => console.log("User Added!"))
         .catch((err) => console.log(err));
@@ -108,25 +108,32 @@ const updateUser = async (req, res) => {
     var decoded = new Buffer(encoded, "base64").toString();
     var username = decoded.split(":")[0];
     var password = decoded.split(":")[1];
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
     // check if the passed username and password match with the values in our database.\
 
     const findUser = await User.findOne({
-      where: { username: username, password: password },
+      where: { username: username }
     });
     if (findUser !== null) {
       if (!req.body.firstName || !req.body.lastName || !req.body.password) {
-        res.status(400).send();
+        res.status(204).send();
       } else {
-        if (passValidator.validate(`${req.body.password}`)) {
-          findUser.update({
-            firstName: `${req.body.firstName}`,
-            lastName: `${req.body.lastName}`,
-            password: `${req.body.password}`,
-          });
-        } else {
-          res.status(400).send();
+        if (await bcrypt.compare(password, findUser.password)){
+            if (passValidator.validate(`${req.body.password}`)) {
+            findUser.update({
+                firstName: `${req.body.firstName}`,
+                lastName: `${req.body.lastName}`,
+                password: hashPassword
+            });
+            res.status(200).send();
+            } else {
+            res.status(400).send();
+            }
         }
-        res.status(200).send();
+        res.status(400).send();
+            
       }
     } else {
       res.status(400).send();
