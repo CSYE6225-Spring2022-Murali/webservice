@@ -14,6 +14,7 @@ source "amazon-ebs" "custom-ami" {
   region        = "us-east-1"
   source_ami    = "ami-033b95fb8079dc481"
   ssh_username  = "ec2-user"
+  ami_users     = ["960807583305"]
 }
 
 
