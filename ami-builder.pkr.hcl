@@ -25,7 +25,7 @@ build {
 
   provisioner "shell" {
     scripts = [
-      "config-install.sh"
+      "installer.sh"
     ]
   }
 }
