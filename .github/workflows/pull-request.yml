@@ -20,5 +20,3 @@ jobs:
         cache: 'npm'
     - name: Install Node Packages
       run: npm ci
-    - name: Run Test Scripts
-      run: npm test
