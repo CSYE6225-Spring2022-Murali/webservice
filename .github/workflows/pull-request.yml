@@ -15,8 +15,8 @@ jobs:
         with:
           command: init
           target: ami-builder.pkr.hcl 
-      - name: Packer Validate
-        uses: hashicorp/packer-github-actions@master
-        with:
-          command: validate
-          target: ami-builder.pkr.hcl 
+      # - name: Packer Validate
+      #   uses: hashicorp/packer-github-actions@master
+      #   with:
+      #     command: validate
+      #     target: ami-builder.pkr.hcl 
