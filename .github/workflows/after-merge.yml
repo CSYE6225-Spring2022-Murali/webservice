@@ -1,11 +1,11 @@
-name: Pull Request Check
+name: After Merge
 on:
-  pull_request:
+  push:
     branches: 
     - main
 jobs:
   build:
-    name: pull-request-checker
+    name: on-push
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,5 +20,7 @@ jobs:
         cache: 'npm'
     - name: Install Node Packages
       run: npm ci
-    - name: Run Test Scripts
-      run: npm test
+    - name: Zip dependency file
+      run: zip -r nodeFile.zip .
+    - name: Execute packer script
+      run: packer build ami-builder.pkr.hcl

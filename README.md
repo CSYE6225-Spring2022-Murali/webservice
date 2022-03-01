@@ -16,3 +16,22 @@ Steps to Build the Application:
 3. run "npm run dev" -- to start the server on dev environment
 4. run "npm test" -- to run mocha test cases
 ------------------ 
+Steps to install Packer:
+1. brew tap hashicorp/tap
+2. brew install hashicorp/tap/packer
+3. packer
+------------------ 
+Steps to authenticate Packer to create/modify/delete ec2
+1. export AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+2. export AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+------------------ 
+After writing the HCL script run:
+1. packer init .
+2. packer fmt .
+3. packer validate .
+4. packer build ami-builder.pkr.hcl
+------------------ 
+To delete AMI and packer snapshot:
+1. aws ec2 deregister-image --image-id <AMI-ID> --region us-east-1
+2. aws ec2 delete-snapshot --snapshot-id <snapshot-ID> --region us-east-1
+------------------
