@@ -17,12 +17,24 @@ source "amazon-ebs" "custom-ami" {
   ami_users     = ["960807583305"]
 }
 
-
 build {
   name = "custom-ami-builder"
   sources = [
     "source.amazon-ebs.custom-ami"
   ]
+
+  provisioner "shell" {
+      inline =  ["mkdir /app"]
+  }
+  
+  provisioner "file" {
+    source = "nodeFile.zip"
+    destination = "/app/"
+  }
+
+  provisioner "shell" {
+      inline =  ["unzip nodeFile.zip"]
+  }
 
   provisioner "shell" {
     scripts = [

@@ -1,0 +1,26 @@
+name: After Merge
+on:
+  push:
+    branches: 
+    - main
+jobs:
+  build:
+    name: on-push
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+        - 14.x
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install Node Packages
+      run: npm ci
+    - name: Zip dependency file
+      run: zip -r nodeFile.zip .
+    - name: Execute packer script
+      run: packer build ami-builder.pkr.hcl

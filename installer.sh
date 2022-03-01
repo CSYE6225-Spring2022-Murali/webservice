@@ -18,3 +18,7 @@ sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
 sudo yum install mysql-server -y
 sudo systemctl start mysqld.service
 sudo systemctl status mysqld.service
+
+
+#starting web application
+npm run dev
