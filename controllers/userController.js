@@ -71,11 +71,6 @@ const addUser = async (req, res) => {
           res.status(201).json(plainUser);
         });
 
-
-
-
-
-
         res
           .status(201)
           .send();

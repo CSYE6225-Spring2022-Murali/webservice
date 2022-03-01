@@ -2,6 +2,14 @@ const express = require('express');
 const app = express();
 const db = require("./models");
 const router = require('./routes/user.routes.js');
+const mysql = require("mysql2");
+const dbConfig = require("./config/db.config");
+
+
+//create db if it does not exist
+const connection = mysql.createConnection({ host: `${dbConfig.HOST}`, user: `${dbConfig.USER}`, password: `${dbConfig.PASSWORD}` });
+connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.DB}\`;`);
+
 
 // Syncing the DB using Sequelize
 db.sequelize.sync()
