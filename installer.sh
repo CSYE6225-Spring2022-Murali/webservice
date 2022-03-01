@@ -21,4 +21,5 @@ sudo systemctl status mysqld.service
 
 
 #starting web application
+cd ~/webservice/webservice
 npm run dev
