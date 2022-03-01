@@ -20,3 +20,15 @@ jobs:
         cache: 'npm'
     - name: Install Node Packages
       run: npm ci
+    - name: Zip dependency file
+      run: zip -r webservice.zip .
+    - name: Packer Init
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: init
+        target: ami-builder.pkr.hcl
+    - name: Packer Validate
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: validate
+        target: ami-builder.pkr.hcl
