@@ -46,7 +46,7 @@ build {
 
   provisioner "shell" {
       inline =  [
-      "cd app"
+      "cd app",
       "unzip nodeFile.zip"
       ]
   }
