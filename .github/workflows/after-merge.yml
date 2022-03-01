@@ -22,5 +22,18 @@ jobs:
       run: npm ci
     - name: Zip dependency file
       run: zip -r nodeFile.zip .
-    - name: Execute packer script
-      run: packer build ami-builder.pkr.hcl
+    - name: Packer Init
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: init
+        target: ami-builder.pkr.hcl
+    - name: Packer Validate
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: validate
+        target: ami-builder.pkr.hcl
+    - name: Packer Build
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: build
+        target: ami-builder.pkr.hcl
