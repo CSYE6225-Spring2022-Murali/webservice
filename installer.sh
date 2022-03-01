@@ -19,7 +19,7 @@ sudo yum install mysql-server -y
 sudo systemctl start mysqld.service
 sudo systemctl status mysqld.service
 
-
+sleep 10
 #starting web application
-cd ~/webservice/webservice
+cd ~/webservice
 npm run dev
