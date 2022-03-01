@@ -43,7 +43,7 @@ build {
       inline =  [
       "cd ~",
       "sudo mkdir -p webservice",
-      "sudo chmod 755 webservice"
+      "sudo chmod 755 webservice",
       "sudo unzip webservice.zip -d webservice"
       ]
   }
