@@ -36,7 +36,7 @@ build {
 
   provisioner "shell" {
       inline =  [
-      "cd ~"
+      "cd ~",
       "sudo mkdir -p webservice",
       "sudo chmod 755 webservice"
       ]
