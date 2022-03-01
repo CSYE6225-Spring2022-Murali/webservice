@@ -24,6 +24,8 @@ source "amazon-ebs" "custom-ami" {
   source_ami    = "ami-033b95fb8079dc481"
   ssh_username  = "ec2-user"
   ami_users     = ["960807583305"]
+  access_key    = "${var.AWS_ACCESS_KEY_ID}"
+  secret_key    = "${var.AWS_SECRET_ACCESS_KEY}"
 }
 
 build {
