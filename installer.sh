@@ -22,4 +22,4 @@ sudo systemctl status mysqld.service
 sleep 10
 #starting web application
 cd ~/webservice
-npm run dev
+npm start
