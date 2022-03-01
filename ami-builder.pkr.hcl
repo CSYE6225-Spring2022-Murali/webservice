@@ -7,6 +7,13 @@ packer {
   }
 }
 
+variable "AWS_ACCESS_KEY_ID" {
+  type = string
+}
+variable "AWS_SECRET_ACCESS_KEY" {
+  type = string
+}
+
 source "amazon-ebs" "custom-ami" {
 
   ami_name      = "myNode-ami"
