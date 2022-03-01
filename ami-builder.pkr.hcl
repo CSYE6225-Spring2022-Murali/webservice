@@ -36,20 +36,21 @@ build {
 
   provisioner "shell" {
       inline =  [
-      "mkdir app",
-      "chmod 755 /app/" 
+      "cd ~"
+      "sudo mkdir -p webservice",
+      "sudo chmod 755 webservice"
       ]
   }
 
   provisioner "file" {
     source = "nodeFile.zip"
-    destination = "/app/"
+    destination = "~/webservice"
   }
 
   provisioner "shell" {
       inline =  [
-      "cd app",
-      "unzip nodeFile.zip"
+      "cd ~/webservice",
+      "sudo unzip nodeFile.zip -d webservice"
       ]
   }
 
