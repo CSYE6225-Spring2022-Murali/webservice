@@ -43,14 +43,14 @@ build {
   }
 
   provisioner "file" {
-    source = "nodeFile.zip"
-    destination = "~/webservice"
+    source = "webservice.zip"
+    destination = "~/webservice/"
   }
 
   provisioner "shell" {
       inline =  [
       "cd ~/webservice",
-      "sudo unzip nodeFile.zip -d webservice"
+      "sudo unzip webservice.zip -d webservice"
       ]
   }
 
