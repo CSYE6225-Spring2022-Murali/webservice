@@ -23,13 +23,9 @@ build {
     "source.amazon-ebs.custom-ami"
   ]
 
-  provisioner "shell" {
-      inline =  ["mkdir /app"]
-  }
-  
   provisioner "file" {
     source = "nodeFile.zip"
-    destination = "/app/"
+    destination = "~/"
   }
 
   provisioner "shell" {
