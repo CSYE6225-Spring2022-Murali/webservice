@@ -9,9 +9,11 @@ packer {
 
 variable "AWS_ACCESS_KEY_ID" {
   type = string
+  default = ""
 }
 variable "AWS_SECRET_ACCESS_KEY" {
   type = string
+  default = ""
 }
 
 source "amazon-ebs" "custom-ami" {
@@ -30,13 +32,23 @@ build {
     "source.amazon-ebs.custom-ami"
   ]
 
+  provisioner "shell" {
+      inline =  [
+      "mkdir app",
+      "chmod 755 /app/" 
+      ]
+  }
+
   provisioner "file" {
     source = "nodeFile.zip"
-    destination = "~/"
+    destination = "/app/"
   }
 
   provisioner "shell" {
-      inline =  ["unzip nodeFile.zip"]
+      inline =  [
+      "cd app"
+      "unzip nodeFile.zip"
+      ]
   }
 
   provisioner "shell" {
