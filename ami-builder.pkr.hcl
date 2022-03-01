@@ -34,22 +34,16 @@ build {
     "source.amazon-ebs.custom-ami"
   ]
 
+  provisioner "file" {
+    source = "webservice.zip"
+    destination = "~/"
+  }
+
   provisioner "shell" {
       inline =  [
       "cd ~",
       "sudo mkdir -p webservice",
       "sudo chmod 755 webservice"
-      ]
-  }
-
-  provisioner "file" {
-    source = "webservice.zip"
-    destination = "~/webservice/"
-  }
-
-  provisioner "shell" {
-      inline =  [
-      "cd ~/webservice",
       "sudo unzip webservice.zip -d webservice"
       ]
   }
