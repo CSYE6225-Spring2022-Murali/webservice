@@ -29,6 +29,7 @@ mysql -uroot -pMurali@123 -e "CREATE DATABASE IF NOT EXISTS test_db"
 sudo yum install -y gcc gcc-c++ make openssl-devel git
 
 #Install Node.js
+curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install -y nodejs
 
 #Install pm2
