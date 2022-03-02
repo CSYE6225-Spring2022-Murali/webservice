@@ -26,6 +26,7 @@ mysql -uroot -p"$pwd" --connect-expired-password -e "Alter user 'root'@'localhos
 
 #using pm2 
 cd ~/webservice
+npm install pm2
 sudo pm2 start index.js
 sudo pm2 startup systemd
 sudo pm2 save
