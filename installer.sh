@@ -35,5 +35,5 @@ sudo yum install -y nodejs
 cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
-#start the application
+#start the application using pm2
 pm2 start index.js
