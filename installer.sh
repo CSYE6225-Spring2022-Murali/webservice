@@ -32,9 +32,8 @@ sudo yum install -y gcc gcc-c++ make openssl-devel git
 curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install -y nodejs
 
+cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
-
 #start the application
-cd ~/webservice
 pm2 index.js
