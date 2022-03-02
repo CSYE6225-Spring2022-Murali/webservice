@@ -11,7 +11,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 nvm install node
 
 #install mysql
-sudo yum update
+sudo yum update -y
 sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
 sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
@@ -20,16 +20,20 @@ sudo systemctl start mysqld.service
 sudo systemctl status mysqld.service
 
 sleep 5
-#updating default password
+#updating default password and create DB
 pwd=`sudo grep 'temporary password' /var/log/mysqld.log | rev | cut -d':' -f 1 | rev | xargs`
 mysql -uroot -p"$pwd" --connect-expired-password -e "Alter user 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Murali@123'"
+mysql -uroot -pMurali@123 -e "CREATE DATABASE IF NOT EXISTS test_db"
 
-#using pm2 
-# cd ~
-# sudo npm install pm2
-# sudo chmod 755 webservice
-# cd ~/webservice
-# sudo pm2 start index.js
-# sudo pm2 startup systemd
-# sudo pm2 save
-# sudo pm2 list
+#Install necessary dev tools
+sudo yum install -y gcc gcc-c++ make openssl-devel git
+
+#Install Node.js
+sudo yum install -y nodejs
+
+#Install pm2
+sudo npm install pm2@latest -g
+
+#start the application
+cd ~/webservice
+pm2 index.js
