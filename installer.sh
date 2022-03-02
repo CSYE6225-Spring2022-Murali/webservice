@@ -18,11 +18,11 @@ sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
 sudo yum install mysql-server -y
 sudo systemctl start mysqld.service
 sudo systemctl status mysqld.service
-sudo mysql
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'muraliroot';
-FLUSH PRIVILEGES;
+# sudo mysql
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'muraliroot';
+# FLUSH PRIVILEGES;
 
 sleep 10
 #starting web application
 cd ~/webservice
-npm start
+# npm start
