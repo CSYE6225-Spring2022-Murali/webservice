@@ -25,8 +25,9 @@ pwd=`sudo grep 'temporary password' /var/log/mysqld.log | rev | cut -d':' -f 1 |
 mysql -uroot -p"$pwd" --connect-expired-password -e "Alter user 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Murali@123'"
 
 #using pm2 
+cd ~
+chmod 755 webservice
 cd ~/webservice
-npm install pm2
 sudo pm2 start index.js
 sudo pm2 startup systemd
 sudo pm2 save
