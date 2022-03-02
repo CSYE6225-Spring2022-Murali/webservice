@@ -36,4 +36,7 @@ cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
 #start the application using pm2
-pm2 start index.js
+sudo pm2 start index.js
+sudo pm2 startup systemd
+sudo pm2 save
+sudo pm2 list
