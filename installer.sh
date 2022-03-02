@@ -18,11 +18,13 @@ sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
 sudo yum install mysql-server -y
 sudo systemctl start mysqld.service
 sudo systemctl status mysqld.service
-# sudo mysql
-# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'muraliroot';
-# FLUSH PRIVILEGES;
 
-sleep 10
+sleep 5
+#updating default password
+pwd=`sudo grep 'temporary password' /var/log/mysqld.log | rev | cut -d':' -f 1 | rev | xargs`
+mysql -uroot -p"$pwd" --connect-expired-password -e "Alter user 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Murali@123'"
+
+#sleep 10
 #starting web application
-cd ~/webservice
+#cd ~/webservice
 # npm start
