@@ -163,7 +163,7 @@ else{
                 lastName: `${req.body.lastName}`,
                 password: hashPassword,
               });
-              res.status(200).send();
+              res.status(201).send();
             } else {
               res.status(400).send();
             }
