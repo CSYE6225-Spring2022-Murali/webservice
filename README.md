@@ -34,4 +34,4 @@ After writing the HCL script run:
 To delete AMI and packer snapshot:
 1. aws ec2 deregister-image --image-id <AMI-ID> --region us-east-1
 2. aws ec2 delete-snapshot --snapshot-id <snapshot-ID> --region us-east-1
-------------------
+-------------------
