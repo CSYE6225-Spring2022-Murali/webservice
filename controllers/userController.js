@@ -154,7 +154,7 @@ else{
       });
       if (findUser !== null) {
         if (!req.body.firstName || !req.body.lastName || !req.body.password) {
-          res.status(204).send();
+          res.status(400).send();
         } else {
           if (await bcrypt.compare(password, findUser.password)) {
             if (passValidator.validate(`${req.body.password}`)) {
@@ -163,7 +163,7 @@ else{
                 lastName: `${req.body.lastName}`,
                 password: hashPassword,
               });
-              res.status(201).send();
+              res.status(204).send();
             } else {
               res.status(400).send();
             }
