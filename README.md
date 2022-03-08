@@ -9,7 +9,7 @@ Prerequisites:
 5. Mocha
 6. Supertest
 7. Assert
-------------------
+-------------------
 Steps to Build the Application:
 1. run "npm i" or "npm install" -- to install dependencies
 2. run "npm i sequelize mysql2 email-validator password-validator" -- to install additional packages
