@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator");
 const passwordValidator = require("password-validator");
 
+
 const passValidator = new passwordValidator();
 passValidator
   .is()
@@ -56,8 +57,6 @@ const addUser = async (req, res) => {
       });
       if (findUser === null) {
         const user = await User.create(info).then((data) => {
-
-
           let plainUser = {
             id: data.id,
             username: data.username,
@@ -67,13 +66,10 @@ const addUser = async (req, res) => {
             account_updated: data.account_updated,
           };
 
-
           res.status(201).json(plainUser);
         });
 
-        res
-          .status(201)
-          .send();
+        res.status(201).send();
       } else {
         res.status(400).send();
       }
@@ -83,6 +79,7 @@ const addUser = async (req, res) => {
 
 // Retrieving User information after basic authentication.
 const userInfo = async (req, res) => {
+  console.log(db);
   if (req.headers.authorization === undefined) {
     res.status(403).send();
   } else {
@@ -122,60 +119,62 @@ const userInfo = async (req, res) => {
 
 //Updating user information
 const updateUser = async (req, res) => {
-if( req.body.id || req.body.account_created || req.body.account_updated){
-  res.status(400).send();
-}
-else{
-
-  if (
-    !req.body.username ||
-    !req.body.firstName ||
-    !req.body.lastName ||
-    !req.body.password
-  ) {
+  if (req.body.id || req.body.account_created || req.body.account_updated) {
     res.status(400).send();
   } else {
-    if (req.headers.authorization === undefined) {
-      res.status(403).send();
+    if (
+      !req.body.username ||
+      !req.body.firstName ||
+      !req.body.lastName ||
+      !req.body.password
+    ) {
+      res.status(400).send();
     } else {
-      //grab the encoded value, format: bearer <Token>, need to extract only <token>
-      var encoded = req.headers.authorization.split(" ")[1];
-      // decode it using base64
-      var decoded = new Buffer(encoded, "base64").toString();
-      var username = decoded.split(":")[0];
-      var password = decoded.split(":")[1];
-
-      const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(req.body.password, salt);
-      // check if the passed username and password match with the values in our database.\
-
-      const findUser = await User.findOne({
-        where: { username: username },
-      });
-      if (findUser !== null) {
-        if (!req.body.firstName || !req.body.lastName || !req.body.password) {
-          res.status(400).send();
-        } else {
-          if (await bcrypt.compare(password, findUser.password)) {
-            if (passValidator.validate(`${req.body.password}`)) {
-              findUser.update({
-                firstName: `${req.body.firstName}`,
-                lastName: `${req.body.lastName}`,
-                password: hashPassword,
-              });
-              res.status(204).send();
-            } else {
-              res.status(400).send();
-            }
-          }
-          res.status(401).send();
-        }
+      if (req.headers.authorization === undefined) {
+        res.status(403).send();
       } else {
-        res.status(400).send();
+        //grab the encoded value, format: bearer <Token>, need to extract only <token>
+        var encoded = req.headers.authorization.split(" ")[1];
+        // decode it using base64
+        var decoded = new Buffer(encoded, "base64").toString();
+        var username = decoded.split(":")[0];
+        var password = decoded.split(":")[1];
+
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.password, salt);
+        // check if the passed username and password match with the values in our database.\
+
+        const findUser = await User.findOne({
+          where: { username: username },
+        });
+        if (findUser !== null) {
+          if (!req.body.firstName || !req.body.lastName || !req.body.password) {
+            res.status(400).send();
+          } else {
+            if (await bcrypt.compare(password, findUser.password)) {
+              if (passValidator.validate(`${req.body.password}`)) {
+                findUser.update({
+                  firstName: `${req.body.firstName}`,
+                  lastName: `${req.body.lastName}`,
+                  password: hashPassword,
+                });
+                res.status(204).send();
+              } else {
+                res.status(400).send();
+              }
+            }
+            res.status(401).send();
+          }
+        } else {
+          res.status(400).send();
+        }
       }
     }
   }
-}
 };
 
-module.exports = { addUser, userInfo, updateUser };
+module.exports = {
+  addUser,
+  userInfo,
+  updateUser,
+};
