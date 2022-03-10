@@ -16,6 +16,7 @@ sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
 sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
 sudo amazon-linux-extras install epel -y
+sudo yum install mysql -y
 
 sleep 5
 
