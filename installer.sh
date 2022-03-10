@@ -33,7 +33,6 @@ cd ~/webservice
 sudo npm install pm2@latest -g
 #start the application using pm2
 pm2 start index.js
-sudo su -c "env PATH=$PATH:/home/unitech/.nvm/versions/node/v14.3/bin pm2 startup <distribution> -u <user> --hp <home-path>"
 pm2 startup systemd
 pm2 save
 pm2 list
