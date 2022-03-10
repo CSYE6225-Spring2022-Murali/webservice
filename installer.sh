@@ -32,8 +32,8 @@ cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
 #start the application using pm2
-sudo pm2 start index.js
-#sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v17.7.0/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
-sudo pm2 startup systemd
-sudo pm2 save
-sudo pm2 list
+# sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v17.7.0/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u ec2-user --hp /home/ec2-user
+# pm2 start index.js
+# pm2 startup systemd | bash
+# pm2 save
+# pm2 list
