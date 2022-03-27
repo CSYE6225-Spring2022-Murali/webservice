@@ -1,8 +1,10 @@
 name: Pull Request Check
+env:
+  ARTIFACT_NAME: webservice-${{ github.sha }}.zip
 on:
-  pull_request:
+  push:
     branches: 
-    - main
+    - assignment07
 jobs:
   build:
     name: pull-request-checker
@@ -21,7 +23,7 @@ jobs:
     - name: Install Node Packages
       run: npm ci
     - name: Zip dependency file
-      run: zip -r webservice.zip .
+      run: zip -r ${{ ARTIFACT_NAME }} .
     - name: Packer Init
       uses: hashicorp/packer-github-actions@master
       with:

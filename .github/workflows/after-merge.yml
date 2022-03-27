@@ -1,4 +1,9 @@
 name: After Merge
+env:
+  AWS_REGION: us-east-1
+  CODEDEPLOY_APPLICATION_NAME: mywebservice
+  CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME: mywebservice
+  ARTIFACT_NAME: webservice-${{ github.sha }}.zip
 on:
   push:
     branches: 
@@ -21,7 +26,7 @@ jobs:
     - name: Install Node Packages
       run: npm ci
     - name: Zip dependency file
-      run: zip -r webservice.zip .
+      run: zip -r ${{ ARTIFACT_NAME }}.zip .
     - name: Packer Init
       uses: hashicorp/packer-github-actions@master
       with:
@@ -33,3 +38,25 @@ jobs:
         command: build
         arguments: -var=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -var=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
         target: ami-builder.pkr.hcl
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    # - name: Copy artifacts to S3
+    #   run: |
+    #     aws s3 sync ${{ ARTIFACT_NAME }}.zip s3://${{ secrets.S3_CODEDEPLOYBUCKET }}
+    # - name: CodeDeploy 
+    #   run: |
+    #     output=$(aws deploy create-deployment \
+    #       --application-name ${{ env.CODEDEPLOY_APPLICATION_NAME }} \
+    #       --deployment-config-name CodeDeployDefault.AllAtOnce \
+    #       --deployment-group-name ${{ env.CODEDEPLOY_APPLICATION_DEPLOYMENT_GROUP_NAME }} \
+    #       --description "CSYE6255 - CodeDeploy" \
+    #       --s3-location bucket=${{  }}, keys=${{ env.ARTIFACT_NAME }},bundleType=zip \
+    #       --output json
+    #     )
+    #     echo $output
+    #     deployID=${ echo $output | jq -r '.deploymentId' }
+    #     aws deploy wait deployment-successful --deployment-id $deployId
