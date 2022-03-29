@@ -75,5 +75,7 @@ jobs:
           --output json)
 
           echo $output
-          deployID=${ echo $output | jq -r '.deploymentId' }
-          aws deploy wait deployment-successful --deployment-id $deployId
+
+          dId=${ echo $output | jq -r '.deploymentId' }
+
+          aws deploy wait deployment-successful --deployment-id $dId
