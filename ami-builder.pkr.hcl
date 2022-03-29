@@ -35,7 +35,7 @@ build {
   ]
 
   provisioner "file" {
-    source = "webservice-${{ github.sha }}.zip"
+    source = "webservice.zip"
     destination = "~/"
   }
 
@@ -44,7 +44,7 @@ build {
       "cd ~",
       "sudo mkdir -p webservice",
       "sudo chmod 755 webservice",
-      "sudo unzip *.zip -d ~/webservice"
+      "sudo unzip webservice.zip -d ~/webservice"
       ]
   }
 
