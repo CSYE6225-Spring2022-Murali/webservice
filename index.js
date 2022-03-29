@@ -11,7 +11,7 @@ db.sequelize.sync()
 ));
 
 // Health Check endpoint - returns 200 HTTP status code
-app.get('/healthz', (req,res) => {
+app.get('/health', (req,res) => {
     res.status(200).send();
 })
 
