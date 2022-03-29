@@ -44,7 +44,7 @@ build {
       "cd ~",
       "sudo mkdir -p webservice",
       "sudo chmod 755 webservice",
-      "sudo unzip *.zip -d ~/webservice"
+      "sudo unzip webservice.zip -d ~/webservice"
       ]
   }
 
