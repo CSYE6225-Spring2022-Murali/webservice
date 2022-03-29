@@ -55,5 +55,4 @@ wget https://aws-codedeploy-$CURRENTREGION.s3.$CURRENTREGION.amazonaws.com/lates
 chmod +x ./install
 # install latest agent
 sudo ./install auto
-# sudo service codedeploy-agent start
 sudo service codedeploy-agent status

@@ -62,7 +62,7 @@ jobs:
         aws configure set aws_secret_access_key ${{ secrets.AWS_GHUSER_SECRET_ACCESS_KEY }}
     - name: Copy artifacts to S3
       run: |
-        aws deploy push --application-name csye6225-webapp --s3-location s3://${{ secrets.AWS_BUCKET }}/${{ env.ARTIFACT_NAME }}.zip
+        aws deploy push --application-name csye6225-webapp --s3-location s3://${{ secrets.AWS_BUCKET }}/${{ env.ARTIFACT_NAME }}
     - name: CodeDeploy 
       run: |
         output=$(aws deploy create-deployment \
