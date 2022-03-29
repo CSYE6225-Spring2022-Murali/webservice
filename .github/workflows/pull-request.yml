@@ -21,7 +21,7 @@ jobs:
     - name: Install Node Packages
       run: npm ci
     - name: Zip dependency file
-      run: zip -r webservice .
+      run: zip -r webservice.zip .
     - name: Packer Init
       uses: hashicorp/packer-github-actions@master
       with:

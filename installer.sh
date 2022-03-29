@@ -30,8 +30,8 @@ sudo yum install -y nodejs
 
 #Install CodeDeploy agent
 sudo yum update -y
-sudo yum install ruby
-sudo yum install wget
+sudo yum install ruby -y
+sudo yum install wget -y
 
 #To clean the AMI of any previous agent caching information
 CODEDEPLOY_BIN="/opt/codedeploy-agent/bin/codedeploy-agent"
