@@ -18,7 +18,7 @@ variable "AWS_SECRET_ACCESS_KEY" {
 
 source "amazon-ebs" "custom-ami" {
 
-  ami_name      = "myNode-ami"
+  ami_name      = "Prebuilt-ami"
   instance_type = "t2.micro"
   region        = "us-east-1"
   source_ami    = "ami-033b95fb8079dc481"
@@ -44,7 +44,7 @@ build {
       "cd ~",
       "sudo mkdir -p webservice",
       "sudo chmod 755 webservice",
-      "sudo unzip webservice.zip -d ~/webservice"
+      "sudo unzip *.zip -d ~/webservice"
       ]
   }
 

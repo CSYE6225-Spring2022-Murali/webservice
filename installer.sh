@@ -28,6 +28,33 @@ sudo yum install -y gcc gcc-c++ make openssl-devel git
 curl --silent --location https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install -y nodejs
 
+#Install CodeDeploy agent
+sudo yum update -y
+sudo yum install ruby
+sudo yum install wget
+
+#To clean the AMI of any previous agent caching information
+CODEDEPLOY_BIN="/opt/codedeploy-agent/bin/codedeploy-agent"
+$CODEDEPLOY_BIN stop
+yum erase codedeploy-agent -y
+
+cd /home/ec2-user
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+chmod +x ./install
+
+#To install the latest version of the CodeDeploy agent
+sudo ./install auto
+
+#Install aws cli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+#To start and check that the service is running
+sudo service codedeploy-agent start
+sudo service codedeploy-agent status
+
+
 cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
