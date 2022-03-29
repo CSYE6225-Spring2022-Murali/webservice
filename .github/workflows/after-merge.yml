@@ -55,11 +55,17 @@ jobs:
         cd codedeploy_artifact
         pwd
         ls -al
-    - name: Set AWS environment
-      run: |
-        aws configure set region us-east-1
-        aws configure set aws_access_key_id ${{ secrets.AWS_GHUSER_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key ${{ secrets.AWS_GHUSER_SECRET_ACCESS_KEY }}
+    # - name: Set AWS environment
+    #   run: |
+    #     aws configure set region us-east-1
+    #     aws configure set aws_access_key_id ${{ secrets.AWS_GHUSER_ACCESS_KEY_ID }}
+    #     aws configure set aws_secret_access_key ${{ secrets.AWS_GHUSER_SECRET_ACCESS_KEY }}
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_GHUSER_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_GHUSER_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
     - name: Copy artifacts to S3
       run: |
         aws deploy push --application-name csye6225-webapp --s3-location s3://${{ secrets.AWS_BUCKET }}/${{ env.ARTIFACT_NAME }}
@@ -76,6 +82,6 @@ jobs:
 
           echo $output
 
-          dId=${ echo $output | jq -r '.deploymentId' }
+          dId=$(echo $output | jq -r '.deploymentId')
 
           aws deploy wait deployment-successful --deployment-id $dId
