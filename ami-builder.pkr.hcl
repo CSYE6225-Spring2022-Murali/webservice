@@ -35,7 +35,7 @@ build {
   ]
 
   provisioner "file" {
-    source = "webservice.zip"
+    source = "webservice-${{ github.sha }}.zip"
     destination = "~/"
   }
 
