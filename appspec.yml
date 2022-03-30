@@ -1,18 +1,11 @@
 version: 0.0
 os: linux
 files:             
-  - source: ./
+  - source: /
     destination: /home/ec2-user/webservice
+file_exists_behavior: OVERWRITE
 hooks:
-  BeforeInstall:
-   - location: ./codedeploy/stopApplication.sh
-     timeout: 180
-     runas: root
-  AfterInstall:
-   - location: ./codedeploy/afterInstall.sh
-     timeout: 180
-     runas: root
   ApplicationStart:
    - location: ./codedeploy/applicationStart.sh
      timeout: 180
-     runas: root
+     runas: ec2-user
