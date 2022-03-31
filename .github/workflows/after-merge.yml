@@ -37,19 +37,14 @@ jobs:
     - name: Packer Validate
       uses: hashicorp/packer-github-actions@master
       with:
-        command: validate
+        command: validate --syntax-only
         target: ami-builder.pkr.hcl
-    - name: Packer Build
-      uses: hashicorp/packer-github-actions@master
-      with:
-        command: build
-        arguments: -var=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -var=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        target: ami-builder.pkr.hcl
-  
-  codeDeploy:
-    name: codeDeploy
-    runs-on: ubuntu-latest
-    steps:
+    # - name: Packer Build
+    #   uses: hashicorp/packer-github-actions@master
+    #   with:
+    #     command: build
+    #     arguments: -var=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -var=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     target: ami-builder.pkr.hcl
     - name: Install AWS Cli
       run: sudo pip install awscli
     - name: Build deployment artifacts
