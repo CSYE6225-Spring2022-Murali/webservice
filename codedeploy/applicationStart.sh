@@ -1,4 +1,7 @@
-echo "Start application"
+echo "After install"
+cd /home/ec2-user
+cd webservice
+echo "npm install dependencies"
+sudo npm install --production
 echo "Start webservice and reload"
-#systemctl start webservice
 sudo pm2 reload all --update-env
