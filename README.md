@@ -34,6 +34,6 @@ After writing the HCL script run:
 To delete AMI and packer snapshot:
 1. aws ec2 deregister-image --image-id <AMI-ID> --region us-east-1
 2. aws ec2 delete-snapshot --snapshot-id <snapshot-ID> --region us-east-1
----------------------
+----------------------
 To run Jmeter Tests:
 sh jmeter -n -t /Users/murali/Downloads/apache-jmeter-5.4.3/bin/csye6225-testPlan.jmx
