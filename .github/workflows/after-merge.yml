@@ -45,6 +45,11 @@ jobs:
         command: build
         arguments: -var=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -var=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
         target: ami-builder.pkr.hcl
+  
+  codeDeploy:
+    name: codeDeploy
+    runs-on: ubuntu-latest
+    steps:
     - name: Install AWS Cli
       run: sudo pip install awscli
     - name: Build deployment artifacts
@@ -76,3 +81,6 @@ jobs:
           echo $output
           dId=$(echo $output | jq -r '.deploymentId')
           aws deploy wait deployment-successful --deployment-id $dId
+      env:
+        AWS_REGION: ${{ env.AWS_REGION }}
+        AWS_CODEDEPLOY_BUCKET: ${{ secrets.AWS_BUCKET }}
