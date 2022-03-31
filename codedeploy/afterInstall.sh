@@ -1,5 +1,4 @@
-echo "After install"
-cd /home/ec2-user
-cd webservice
-echo "npm clean install dependencies"
-sudo npm ci 
+#!/bin/bash
+cd /home/ec2-user/webservice
+sudo rm -rf node_modules
+sudo npm i
