@@ -33,6 +33,18 @@ sudo yum update -y
 sudo yum install ruby -y
 sudo yum install wget -y
 
+#Install aws cli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+cd ~/webservice
+#Install pm2
+sudo npm install pm2@latest -g
+sudo pm2 startup systemd --service-name myapp
+sudo pm2 start index.js
+sudo pm2 save
+
 #To clean the AMI of any previous agent caching information
 CODEDEPLOY_BIN="/opt/codedeploy-agent/bin/codedeploy-agent"
 $CODEDEPLOY_BIN stop
@@ -44,19 +56,6 @@ chmod +x ./install
 
 #To install the latest version of the CodeDeploy agent
 sudo ./install auto
-
-#Install aws cli
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-
 #To start and check that the service is running
-sudo service codedeploy-agent start
+# sudo service codedeploy-agent start
 sudo service codedeploy-agent status
-
-cd ~/webservice
-#Install pm2
-sudo npm install pm2@latest -g
-sudo pm2 startup systemd --service-name myapp
-sudo pm2 start index.js
-sudo pm2 save
