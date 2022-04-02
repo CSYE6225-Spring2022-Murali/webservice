@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches: 
-    - main
+    - assignment08
 jobs:
   build:
     name: on-push

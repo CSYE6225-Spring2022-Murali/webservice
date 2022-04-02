@@ -1,4 +1,6 @@
 #!/bin/bash
-cd /home/ec2-user/webservice
-sudo rm -rf node_modules
-sudo npm i
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -a fetch-config \
+    -m ec2 \
+    -c file:/home/ec2-user/webservice/AmazonCloudWatch-agent-config.json \
+    -s
