@@ -4,7 +4,7 @@ const db = require("./models");
 const router = require('./routes/user.routes.js');
 require('dotenv').config();
 var statsDClient = require('statsd-client')
-var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true, prefix: 'csye6225-webapp'});
+var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
 
 // Syncing the DB using Sequelize
 db.sequelize.sync()
