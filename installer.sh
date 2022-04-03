@@ -60,6 +60,7 @@ sudo ./install auto
 # sudo service codedeploy-agent start
 sudo service codedeploy-agent status
 
+sudo mkdir -p ~/logs
 #Install cloud watch agent
 sudo yum install amazon-cloudwatch-agent -y
 #Starting the cloud watch agent

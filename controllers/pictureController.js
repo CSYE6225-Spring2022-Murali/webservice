@@ -8,7 +8,7 @@ const User = db.users;
 const Picture = db.picture;
 const bcrypt = require("bcrypt");
 var statsDClient = require('statsd-client')
-var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
+var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true, prefix: 'csye6225-webapp'});
 
 //Accepted FileFormats
 const acceptedFileFormats = (req, file, cb) => {

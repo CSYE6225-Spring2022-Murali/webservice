@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator");
 const passwordValidator = require("password-validator");
 var statsDClient = require('statsd-client')
-var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
+var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true, prefix: 'csye6225-webapp'});
 
 
 const passValidator = new passwordValidator();
