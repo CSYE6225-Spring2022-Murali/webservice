@@ -41,6 +41,7 @@ sudo ./aws/install
 cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
+sudo mkdir -p ~/logs
 sudo pm2 startup systemd --service-name myapp
 #sudo pm2 start index.js
 sudo pm2 start ecosystem.config.js
@@ -61,7 +62,7 @@ sudo ./install auto
 # sudo service codedeploy-agent start
 sudo service codedeploy-agent status
 
-sudo mkdir -p ~/logs
+
 #Install cloud watch agent
 sudo yum install amazon-cloudwatch-agent -y
 #Starting the cloud watch agent
