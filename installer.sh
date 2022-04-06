@@ -42,7 +42,8 @@ cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
 sudo pm2 startup systemd --service-name myapp
-sudo pm2 start index.js
+#sudo pm2 start index.js
+sudo pm2 start ecosystem.config.js
 sudo pm2 save
 
 #To clean the AMI of any previous agent caching information

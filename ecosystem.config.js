@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'webapp',
+      name: 'myapp',
       script: 'npm',
       args: 'start',
       error_file: '/home/ec2-user/logs/webapp-err.log',
