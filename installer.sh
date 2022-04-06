@@ -41,8 +41,10 @@ sudo ./aws/install
 cd ~/webservice
 #Install pm2
 sudo npm install pm2@latest -g
+sudo mkdir -p ~/logs
 sudo pm2 startup systemd --service-name myapp
-sudo pm2 start index.js
+#sudo pm2 start index.js
+sudo pm2 start ecosystem.config.js
 sudo pm2 save
 
 #To clean the AMI of any previous agent caching information
@@ -59,3 +61,9 @@ sudo ./install auto
 #To start and check that the service is running
 # sudo service codedeploy-agent start
 sudo service codedeploy-agent status
+
+
+#Install cloud watch agent
+sudo yum install amazon-cloudwatch-agent -y
+#Starting the cloud watch agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/webservice/AmazonCloudWatch-agent-config.json -s

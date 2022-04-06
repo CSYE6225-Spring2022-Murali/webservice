@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 //Validators
 const emailValidator = require("email-validator");
 const passwordValidator = require("password-validator");
+var statsDClient = require('statsd-client')
+var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
 
 
 const passValidator = new passwordValidator();
@@ -25,6 +27,8 @@ passValidator
 
 //Adding User to app
 const addUser = async (req, res) => {
+  sdc.increment('/v1/user');
+  console.log("hit /v1/user - add User")
   if (
     !req.body.username ||
     !req.body.firstName ||
@@ -79,6 +83,8 @@ const addUser = async (req, res) => {
 
 // Retrieving User information after basic authentication.
 const userInfo = async (req, res) => {
+  sdc.increment('/v1/user');
+  console.log("hit /v1/user -- Get User");
   console.log(db);
   if (req.headers.authorization === undefined) {
     res.status(403).send();
@@ -119,6 +125,8 @@ const userInfo = async (req, res) => {
 
 //Updating user information
 const updateUser = async (req, res) => {
+  sdc.increment('/v1/user');
+  console.log("hit /v1/user -- Update User");
   if (req.body.id || req.body.account_created || req.body.account_updated) {
     res.status(400).send();
   } else {

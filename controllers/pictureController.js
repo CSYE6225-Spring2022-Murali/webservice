@@ -7,6 +7,10 @@ const db = require("../models");
 const User = db.users;
 const Picture = db.picture;
 const bcrypt = require("bcrypt");
+var statsDClient = require('statsd-client')
+var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
+const morgan = require('morgan');
+
 
 //Accepted FileFormats
 const acceptedFileFormats = (req, file, cb) => {
@@ -31,6 +35,8 @@ const s3 = new aws.S3({
 //Adding/Updating user profile pic
 //Create Picture
 const createPicture = async (req, res) => {
+  sdc.increment('/v1/user/self/pic');
+  console.log("hit /v1/user/self/pic");
   if (req.headers.authorization === undefined) {
     res.status(403).send();
   }
@@ -145,7 +151,8 @@ const createPicture = async (req, res) => {
 
 //Get Picture
 const getPicture = async (req, res) => {
-
+  sdc.increment('/v1/user/self/pic');
+  console.log("hit /v1/user/self/pic");
     if (req.headers.authorization === undefined) {
         res.status(403).send();
       }
@@ -209,6 +216,8 @@ const getPicture = async (req, res) => {
 //Delete Picture
 const deletePicture = async (req, res) => {
 
+  sdc.increment('/v1/user/self/pic');
+  console.log("hit /v1/user/self/pic");
     if (req.headers.authorization === undefined) {
         res.status(403).send();
       }
