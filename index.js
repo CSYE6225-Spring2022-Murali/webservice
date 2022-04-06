@@ -19,9 +19,9 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('common'));
 
 // Health Check endpoint - returns 200 HTTP status code 
-app.get('/health', (req,res) => {
-    sdc.increment('/health');
-    console.log("hit /health");
+app.get('/healthz', (req,res) => {
+    sdc.increment('/healthz');
+    console.log("hit /healthz");
     res.status(200).send();
 })
 
