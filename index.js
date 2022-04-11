@@ -26,7 +26,7 @@ app.get('/healthz', (req,res) => {
 })
 
 // Router
-app.use('/v1/user', router);
+app.use('/v2/user', router);
 
 const PORT = 5001;
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
