@@ -18,10 +18,10 @@ const awsConfig = {
 AWS.config.update(awsConfig);
 
 const dynamoDBClient = new AWS.DynamoDB({
-    // credentials: AWS.config.credentials,
+    credentials: AWS.config.credentials,
     // accessKeyId: process.env.AWS_ACCESS_KEY,
     // secretAccessKey: process.env.AWS_SECRET_KEY,
-    // region: "us-east-1",
+    region: "us-east-1",
 });
 
 const dynamo = {};
