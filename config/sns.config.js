@@ -9,18 +9,8 @@ AWS.config.credentials = new AWS.EC2MetadataCredentials({
     retryDelayOptions: { base: 200 },
 });
 
-// const awsConfig = {
-//     "region" : "us-east-1",
-//     "accessKeyId" : process.env.AWS_ACCESS_KEY_ID,
-//     "secretAccessKey" : process.env.AWS_SECRET_ACCESS_KEY
-// }
-
-// AWS.config.update(awsConfig);
-
 const publishTextPromise = new AWS.SNS({
     credentials: AWS.config.credentials,
-    // accessKeyId: process.env.AWS_ACCESS_KEY,
-    // secretAccessKey: process.env.AWS_SECRET_KEY,
     region: "us-east-1",
 });
 
