@@ -12,6 +12,7 @@ var sdc = new statsDClient({ host: "localhost", port: 8125, debug: true });
 const jwt = require("jsonwebtoken");
 const dynamo = require("../config/dynamodb.config");
 const sns = require("../config/sns.config");
+const crypto= require('crypto')
 
 const passValidator = new passwordValidator();
 passValidator
@@ -67,7 +68,8 @@ const addUser = async (req, res) => {
         if (findUser === null) {
           // const user = await
           User.create(info).then((data) => {
-            const token = `${jwt.sign({ data }, data.id)}${Date.now()}}`;
+            // const token = `${jwt.sign({ data }, data.id)}${Date.now()}}`;
+            const token = crypto.randomBytes(16).toString("hex")
             //Add record in DynamoDB
             const putParams = {
               TableName: "TokenTable",
