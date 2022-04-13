@@ -14,7 +14,7 @@ router.get("/user/self/pic", pictureController.getPicture);
 
 router.delete("/user/self/pic", pictureController.deletePicture);
 
-router.put("/verifyUserEmail", userController.verifyUser);
+router.get("/verifyUserEmail", userController.verifyUser);
 
 router.post("/resendToken", userController.resendToken);
 
