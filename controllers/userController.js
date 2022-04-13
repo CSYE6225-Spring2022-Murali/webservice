@@ -80,7 +80,7 @@ const addUser = async (req, res) => {
             dynamo.dynamoDBClient.putItem(putParams, (err, putItemResponse) => {
               if (err) {
                 console.error(`[ERROR]: ${err.message}`);
-                res.status(504).send();
+                res.status(504).send("1");
               } else {
                 console.log(
                   `[INFO]: New user token uploaded to DynamoDB : ${token}`
@@ -96,7 +96,7 @@ const addUser = async (req, res) => {
                 },
                 'token': {
                   DataType: 'String',
-                  StringValue: req.body.token
+                  StringValue: token
               }
             }
             };
@@ -119,7 +119,7 @@ const addUser = async (req, res) => {
               })
               .catch(function (err) {
                 console.error(`[ERROR]: ${err.message}`);
-                res.status(504).send();
+                res.status(504).send("2");
               });
               }
             });
