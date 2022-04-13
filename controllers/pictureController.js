@@ -57,83 +57,88 @@ const createPicture = async (req, res) => {
           //Check if passwords are same
           const isPasswordCorrect = bcrypt.compareSync(password, user.password);
           if (isPasswordCorrect) {
-            Picture.findOne({
-              where: { user_id: user.id },
-            }).then(async (picture) => {
-              if (picture) {
-                await s3.deleteObject(
-                  {
-                    Key: picture.url,
-                    Bucket: process.env.AWS_BUCKET_NAME,
-                  },
-                  (err, data) => {
-                    if (err) {
-                      console.log(err);
-                      return res
-                        .status(500)
-                        .send("Cannot connect to S3 Bucket");
+            if(user.status==="Verified"){
+              Picture.findOne({
+                where: { user_id: user.id },
+              }).then(async (picture) => {
+                if (picture) {
+                  await s3.deleteObject(
+                    {
+                      Key: picture.url,
+                      Bucket: process.env.AWS_BUCKET_NAME,
+                    },
+                    (err, data) => {
+                      if (err) {
+                        console.log(err);
+                        return res
+                          .status(500)
+                          .send("Cannot connect to S3 Bucket");
+                      } else {
+                        picture.destroy();
+                      }
+                    }
+                  );
+                }
+                //Upload file to S3
+                let actualFileName, fileName, filePath;
+                const uploadSingle = multer({
+                  storage: multerS3({
+                    s3,
+                    bucket: process.env.AWS_BUCKET_NAME,
+                    key: (req, file, cb) => {
+                      fileName = `${file.originalname}`;
+                      filePath = `${user.id}/${fileName}`;
+                      bucketName=`${process.env.AWS_BUCKET_NAME}`;
+                      cb(null, filePath);
+                    },
+                  }),
+                  fileFilter: acceptedFileFormats,
+                }).single("picture-upload");
+                //Upload to DB
+                uploadSingle(req, res, async (err) => {
+                  //console.log(req.file);
+                  if (err) res.status(400).json({ err });
+                  else {
+                    if (req.file) {
+                      //Save file in DB
+                      await Picture.create({
+                        file_name: fileName,
+                        id: uuidv4(),
+                        url: filePath,
+                        user_id: user.id,
+                      }).then((profilePic) => {
+                        const { file_name, id, url, user_id, upload_date} =
+                          profilePic;
+                        res.status(201).json({
+                          file_name,
+                          id,
+                          url:`${process.env.AWS_BUCKET_NAME}/${user.id}/${fileName}`,
+                          upload_date,
+                          user_id,
+                          
+                        });
+                      });
                     } else {
-                      picture.destroy();
-                    //   res.sendStatus(204);
-                    //   return;
+                      return res
+                        .status(400)
+                        .json({ message: "Image is not valid" });
                     }
                   }
-                );
-              }
-              //Upload file to S3
-              let actualFileName, fileName, filePath;
-              const uploadSingle = multer({
-                storage: multerS3({
-                  s3,
-                  bucket: process.env.AWS_BUCKET_NAME,
-                  key: (req, file, cb) => {
-                    fileName = `${file.originalname}`;
-                    // fileName = `${user.id}-profile-pic-${file.originalname}`;
-                    // filePath = `${process.env.AWS_BUCKET_NAME}/${user.id}/${fileName}`;
-                    filePath = `${user.id}/${fileName}`;
-                    bucketName=`${process.env.AWS_BUCKET_NAME}`;
-                    cb(null, filePath);
-                  },
-                }),
-                fileFilter: acceptedFileFormats,
-              }).single("picture-upload");
-              //Upload to DB
-              uploadSingle(req, res, async (err) => {
-                //console.log(req.file);
-                if (err) res.status(400).json({ err });
-                else {
-                  if (req.file) {
-                    //Save file in DB
-                    await Picture.create({
-                      file_name: fileName,
-                      id: uuidv4(),
-                      url: filePath,
-                      user_id: user.id,
-                    }).then((profilePic) => {
-                      const { file_name, id, url, user_id, upload_date} =
-                        profilePic;
-                      res.status(201).json({
-                        file_name,
-                        id,
-                        url:`${process.env.AWS_BUCKET_NAME}/${user.id}/${fileName}`,
-                        upload_date,
-                        user_id,
-                        
-                      });
-                    });
-                  } else {
-                    return res
-                      .status(400)
-                      .json({ message: "Image is not valid" });
-                  }
-                }
+                });
               });
-            });
-          } else {
-            return res
-              .status(401)
-              .json({ message: "The user is unauthorized" });
-          }
+            } else{
+              console.log(`[ERROR]: User email id not verified`)
+              res.status(403).json({
+                  success: false,
+                  message: "Please verify your email id"
+              })
+            }
+            } else {
+              return res
+                .status(401)
+                .json({ message: "The user is unauthorized" });
+            }
+          
         } else {
           return res.status(404).json({ message: "User does not exist" });
         }
@@ -176,24 +181,32 @@ const getPicture = async (req, res) => {
             );
             if (isPasswordCorrect) {
               //Check if picture exists
-              Picture.findOne({
-                where: { user_id: user.id },
-              }).then((picture) => {
-                if (picture) {
-                  const { file_name, id, url, upload_date, user_id } = picture;
-                  res.status(200).send({
-                    file_name,  
-                    id,
-                    url:`${process.env.AWS_BUCKET_NAME}/${user.id}/${file_name}`,
-                    upload_date,
-                    user_id,
+              if(user.status==="Verified"){
+                  Picture.findOne({
+                    where: { user_id: user.id },
+                  }).then((picture) => {
+                    if (picture) {
+                      const { file_name, id, url, upload_date, user_id } = picture;
+                      res.status(200).send({
+                        file_name,  
+                        id,
+                        url:`${process.env.AWS_BUCKET_NAME}/${user.id}/${file_name}`,
+                        upload_date,
+                        user_id,
+                      });
+                    } else {
+                      return res
+                        .status(404)
+                        .json({ message: "No profile picture available" });
+                    }
                   });
-                } else {
-                  return res
-                    .status(404)
-                    .json({ message: "No profile picture available" });
-                }
-              });
+              }else{
+                console.log(`[ERROR]: User email id not verified`)
+                res.status(403).json({
+                    success: false,
+                    message: "Please verify your email id"
+                })
+              }
             } else {
               return res
                 .status(401)
@@ -241,34 +254,43 @@ const deletePicture = async (req, res) => {
             );
             if (isPasswordCorrect) {
               //Check if picture exists
-              Picture.findOne({
-                where: { user_id: user.id },
-              }).then(async (picture) => {
-                if (picture) {
-                  await s3.deleteObject(
-                    {
-                      Key: picture.url,
-                      Bucket: process.env.AWS_BUCKET_NAME,
-                    },
-                    (err, data) => {
-                      if (err) {
-                        console.log(err);
-                        return res
-                          .status(500)
-                          .send("Cannot connect to S3 Bucket");
-                      } else {
-                        picture.destroy();
-                        res.sendStatus(204);
-                        return;
-                      }
+              if(user.status==="Verified"){
+                  Picture.findOne({
+                    where: { user_id: user.id },
+                  }).then(async (picture) => {
+                    if (picture) {
+                      await s3.deleteObject(
+                        {
+                          Key: picture.url,
+                          Bucket: process.env.AWS_BUCKET_NAME,
+                        },
+                        (err, data) => {
+                          if (err) {
+                            console.log(err);
+                            return res
+                              .status(500)
+                              .send("Cannot connect to S3 Bucket");
+                          } else {
+                            picture.destroy();
+                            res.sendStatus(204);
+                            return;
+                          }
+                        }
+                      );
+                    } else {
+                      res
+                        .status(404)
+                        .json({ message: "No profile picture available" });
                     }
-                  );
-                } else {
-                  res
-                    .status(404)
-                    .json({ message: "No profile picture available" });
-                }
-              });
+                  });
+
+              }else{
+                console.log(`[ERROR]: User email id not verified`)
+                res.status(403).json({
+                    success: false,
+                    message: "Please verify your email id"
+                })
+              }
             } else {
               return res
                 .status(401)

@@ -25,6 +25,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         writeOnly: true,
       },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Not Verified"
+    },
     },
     {
       createdAt: "account_created",

@@ -6,6 +6,7 @@ require('dotenv').config();
 var statsDClient = require('statsd-client')
 var sdc = new statsDClient({host: 'localhost', port: 8125, debug: true});
 const morgan = require('morgan');
+// require('./config/env.config')
 
 // Syncing the DB using Sequelize
 db.sequelize.sync()
@@ -26,7 +27,7 @@ app.get('/healthz', (req,res) => {
 })
 
 // Router
-app.use('/v2/user', router);
+app.use('/v1', router);
 
 const PORT = 5001;
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`))

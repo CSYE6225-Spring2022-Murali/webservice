@@ -2,16 +2,20 @@ const router = require('express').Router();
 const userController = require('../controllers/userController.js');
 const pictureController = require('../controllers/pictureController');
 
-router.post("/", userController.addUser);
+router.post("/user", userController.addUser);
 
-router.get("/self", userController.userInfo);
+router.get("/user/self", userController.userInfo);
 
-router.put("/self", userController.updateUser);
+router.put("/user/self", userController.updateUser);
 
-router.post("/self/pic", pictureController.createPicture);
+router.post("/user/self/pic", pictureController.createPicture);
 
-router.get("/self/pic", pictureController.getPicture);
+router.get("/user/self/pic", pictureController.getPicture);
 
-router.delete("/self/pic", pictureController.deletePicture);
+router.delete("/user/self/pic", pictureController.deletePicture);
+
+router.put("/verifyUserEmail", userController.verifyUser);
+
+router.post("/resendToken", userController.resendToken);
 
  module.exports = router; 
