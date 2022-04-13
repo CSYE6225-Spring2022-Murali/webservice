@@ -15,6 +15,9 @@ Steps to Build the Application:
 2. run "npm i sequelize mysql2 email-validator password-validator" -- to install additional packages
 3. run "npm run dev" -- to start the server on dev environment
 4. run "npm test" -- to run mocha test cases
+------------------
+Starting mysql server locally:
+mysql -u root -pmuraliroot
 ------------------ 
 Steps to install Packer:
 1. brew tap hashicorp/tap
