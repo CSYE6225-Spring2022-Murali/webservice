@@ -68,7 +68,6 @@ const addUser = async (req, res) => {
         if (findUser === null) {
           // const user = await
           User.create(info).then((data) => {
-            // const token = `${jwt.sign({ data }, data.id)}${Date.now()}}`;
             const token = crypto.randomBytes(16).toString("hex")
             //Add record in DynamoDB
             const putParams = {
