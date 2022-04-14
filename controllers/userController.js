@@ -278,7 +278,7 @@ const verifyUser = (req, res) => {
           console.log(
             `[INFO]: User verification token retrieved from DynamoDB`
           );
-          if (getResponseItem.Item.token.S === token) {
+          if (getResponseItem.Item.token.S === token && Math.floor(Date.now()/1000) < getResponseItem.Item.ttl) {
             // response.dataValues.status = "Verified";
             // response.update(response).then((updatedUser) => {
             //   console.log(`[INFO]: User email id verified`);
