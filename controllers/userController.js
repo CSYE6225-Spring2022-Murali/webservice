@@ -278,12 +278,8 @@ const verifyUser = (req, res) => {
           console.log(
             `[INFO]: User verification token retrieved from DynamoDB`
           );
+          console.log("-----------------------------------"+getResponseItem.Item.ttl);
           if (getResponseItem.Item.token.S === token && Math.floor(Date.now()/1000) < getResponseItem.Item.ttl) {
-            // response.dataValues.status = "Verified";
-            // response.update(response).then((updatedUser) => {
-            //   console.log(`[INFO]: User email id verified`);
-            //   res.status(204).send();
-            // });
             response.update({
               status: "Verified"
             });
@@ -301,142 +297,9 @@ const verifyUser = (req, res) => {
   });
 };
 
-const resendToken = async(req, res) => {
-  console.log("[INFO]: ResendToken endpoint hit");
-
-  if (req.headers.authorization === undefined) {
-    res.status(403).send();
-  } else {
-    //grab the encoded value, format: bearer <Token>, need to extract only <token>
-    var encoded = req.headers.authorization.split(" ")[1];
-    // decode it using base64
-    var decoded = new Buffer(encoded, "base64").toString();
-    var username = decoded.split(":")[0];
-    var password = decoded.split(":")[1];
-
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
-    // check if the passed username and password match with the values in our database.\
-
-    const findUser = await User.findOne({
-      where: { username: username },
-    });
-
-    if (findUser.username !== null) {
-    //Please login
-    console.error("[ERROR] 400: Username missing in headers");
-    res.status(400).send();
-  } else {
-    User.findOne({
-      where: { username: findUser.username },
-    }).then(async (user) => {
-      if (user === null) {
-        //User does not exist
-        console.error("[ERROR] 401: User does not exists");
-        res.status(401).send();
-      } else {
-        if (
-          passValidator.validate(`${req.body.password}`)
-        ) {
-          console.log(`[INFO]: User authenticated: ${findUser.username}`);
-          if (user.dataValues.status === "Verified") {
-            console.log(`[INFO]: User email id is already verified`);
-            res.status(400).send();
-          } else {
-            const getParams = {
-              TableName: "TokenTable",
-              Key: {
-                username: { S: user.dataValues.username },
-              },
-            };
-            dynamo.dynamoDBClient.getItem(getParams, (err, getResponseItem) => {
-              if (err) {
-                console.log(`[ERROR]: ${err.message}`);
-                res.status(504).send();
-              } else {
-                console.log(
-                  `[INFO]: User verification token retrieved from DynamoDB`
-                );
-                if (getResponseItem.Item.token.S) {
-                  res.status(400).json({
-                    success: false,
-                    message: "Verification Link not expired",
-                  });
-                } else {
-                  const token = `${jwt.sign(
-                    { user },
-                    user.dataValues.id
-                  )}${Date.now()}}`;
-                  //Add record in DynamoDB
-                  const putParams = {
-                    TableName: "TokenTable",
-                    Item: {
-                      username: { S: user.dataValues.username },
-                      token: { S: token },
-                      ttl: {
-                        N: (Math.floor(+new Date() / 1000) + 300).toString(),
-                      },
-                    },
-                  };
-                  dynamo.dynamoDBClient.putItem(
-                    putParams,
-                    (err, putItemResponse) => {
-                      if (err) {
-                        console.log(`[ERROR]: ${err.message}`);
-                        res.status(504).send();
-                      } else {
-                        console.log(
-                          `[INFO]: New user token uploaded to DynamoDB : ${token}`
-                        );
-                      }
-                    }
-                  );
-                  //Publish in Amazon SNS
-                  const message = {
-                    Message: `${user} : ${token} : "String"` /* required */,
-                    TopicArn: process.env.SNSTOPICARN,
-                    MessageAttributes: {
-                      'emailid': {
-                          DataType: 'String',
-                          StringValue: req.body.username
-                      }
-                  }
-                  };
-                  sns.publishTextPromise.publish(message).promise().then(function (data) {
-                      console.log(
-                        `[INFO]: Message ${message.Message} sent to the topic ${message.TopicArn}`
-                      );
-                      console.log("[INFO]: MessageID is " + data.MessageId);
-                      res.status(200).json({
-                        success: true,
-                        message: "New verification email sent",
-                      });
-                    })
-                    .catch(function (err) {
-                      console.error(`[ERROR]: ${err.message}`);
-                      res.status(504).send();
-                    });
-                }
-              }
-            });
-          }
-        } else {
-          console.error(`[ERROR] 403: User password mismatch`);
-          res.status(403).send();
-        }
-      }
-      
-    });
-  }
-}
-
-
-};
-
 module.exports = {
   addUser,
   userInfo,
   updateUser,
   verifyUser,
-  resendToken,
 };

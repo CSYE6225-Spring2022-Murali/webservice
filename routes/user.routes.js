@@ -16,6 +16,4 @@ router.delete("/user/self/pic", pictureController.deletePicture);
 
 router.get("/verifyUserEmail", userController.verifyUser);
 
-router.post("/resendToken", userController.resendToken);
-
  module.exports = router; 
