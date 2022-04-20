@@ -40,3 +40,8 @@ To delete AMI and packer snapshot:
 ----------------------
 To run Jmeter Tests:
 sh jmeter -n -t /Users/murali/Downloads/apache-jmeter-5.4.3/bin/csye6225-testPlan.jmx
+-------------------
+Cmds to check SSL status in RDS:
+1. \s
+2. status
+3. SHOW STATUS LIKE 'Ssl_cipher';
