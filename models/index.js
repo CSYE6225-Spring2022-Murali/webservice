@@ -1,12 +1,19 @@
 const dbConfig = require("../config/db.config.js");
+const fs = require('fs');
 
-
+const rdsCa = fs.readFileSync(__dirname +'/rds-combined-ca-bundle.pem');
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
-  operatorsAliases: false
+  operatorsAliases: false,
+  dialectOptions: {
+    ssl: {
+        rejectUnauthorized: true,
+        ca: [rdsCa]
+    }
+}
 });
 
 
